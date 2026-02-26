@@ -1,0 +1,440 @@
+/* Aquí se importa la nueva fuente 'Blinker' de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Blinker:wght@400;600;700;900&display=swap');
+/* Nueva fuente para la animación */
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+/* Nueva fuente para el contador digital */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+
+body {
+    /* TEMA ROJO Y NEGRO: Fondo negro puro y fuente Inter */
+    font-family: 'Inter', sans-serif;
+    background-color: #050505;
+    touch-action: pan-x pan-y;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Contenedor principal */
+.container-full {
+    width: 100%;
+    max-width: none;
+    border: 1px solid #333;
+    /* Borde sutil */
+    position: relative;
+    z-index: 1;
+}
+
+/* Fondo para la interfaz de inicio (Cédula/Nombre) */
+.initial-bg {
+    background-image: url('data:image/jpeg;base64,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');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    transition: background 1s ease-in-out;
+}
+
+/* Fondo para la interfaz principal (Dashboard de productos) */
+.app-bg {
+    background-image: url('https://wallpapers.com/images/hd/black-red-neon-gzk57xzkuzjmuwip.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    transition: background 1s ease-in-out;
+}
+
+/* Estilo para el elemento de producto seleccionado */
+.highlighted {
+    background-color: #450a0a !important;
+    /* Rojo muy oscuro */
+    border-left: 4px solid #dc2626;
+    /* Borde rojo vivo */
+}
+
+/* Estilo para la ventana modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.15);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+
+/* Modal con efecto Cristal (Glassmorphism) */
+.glass-modal {
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(220, 38, 38, 0.2) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background-color: #121212;
+    color: #fca5a5;
+    /* Rojo claro para el texto */
+    padding: 24px;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.1);
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    border: 1px solid #450a0a;
+}
+
+/* Oculta elementos al imprimir */
+@media print {
+    body {
+        background-color: #fff;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    #printOnlyContent {
+        display: block !important;
+        background-color: #fff !important;
+    }
+
+    .print-list-item {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    #barcodeContainer {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+}
+
+/* Calculadora */
+#calculatorModal .modal-content {
+    max-width: 350px;
+    border: 2px solid #991b1b;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.calculator-button {
+    background-color: #1a1a1a;
+    color: #ef4444;
+    /* Rojo */
+    font-weight: 600;
+    padding: 16px;
+    border-radius: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #450a0a;
+}
+
+.calculator-button:hover {
+    background-color: #450a0a;
+    color: #f87171;
+}
+
+.calculator-button.operator {
+    background-color: #991b1b;
+    color: white;
+}
+
+.calculator-button.operator:hover {
+    background-color: #b91c1c;
+}
+
+/* Mini-modal de unidades */
+#unitModal .modal-content {
+    max-width: 300px;
+    text-align: center;
+}
+
+.unit-button {
+    background-color: #b91c1c;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.unit-button:hover {
+    background-color: #dc2626;
+}
+
+.unit-option-highlighted {
+    background-color: #7f1d1d;
+    border: 2px solid #ef4444;
+}
+
+/* Estilos para la nueva modal de opciones */
+#optionsModal .modal-content {
+    width: 280px;
+    max-width: 90%;
+    text-align: center;
+    background-color: #0a0a0a;
+    border: 1px solid #991b1b;
+    border-radius: 1rem;
+    color: #f87171;
+}
+
+.option-button {
+    background-color: transparent;
+    color: #f87171;
+    padding: 12px;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+}
+
+.option-button:hover {
+    background-color: #450a0a;
+}
+
+.option-button svg {
+    margin-right: 8px;
+    height: 20px;
+    width: 20px;
+}
+
+/* Contador digital */
+.digital-counter {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    background-color: #000;
+    color: #ff4d4d;
+    /* Rojo neón */
+    text-shadow: 0 0 4px #ff4d4d, 0 0 8px #991b1b;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #991b1b;
+    box-shadow: 0 0 10px rgba(153, 27, 27, 0.4) inset;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Impresión */
+#printOnlyContent {
+    display: none;
+    width: 100%;
+}
+
+/* QR */
+#qrModal .modal-content {
+    max-width: 350px;
+    text-align: center;
+}
+
+/* Animación de Título */
+.animated-title-container {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Staatliches', sans-serif;
+    font-size: 3rem;
+    color: #ef4444;
+    /* Rojo vibrante */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    pointer-events: none;
+    z-index: 2000;
+}
+
+.animated-title-container span {
+    opacity: 0;
+    position: relative;
+    display: inline-block;
+    animation: runInAndOut 18s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes runInAndOut {
+    0% {
+        opacity: 0;
+        transform: translateX(-80px) rotate(-10deg);
+    }
+
+    2.1% {
+        opacity: 1;
+        transform: translateX(10px) rotate(3deg);
+    }
+
+    3.5% {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg);
+    }
+
+    55% {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg);
+    }
+
+    57.1% {
+        opacity: 1;
+        transform: translateX(10px) rotate(3deg);
+    }
+
+    58.5% {
+        opacity: 0;
+        transform: translateX(-80px) rotate(-10deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-80px) rotate(-10deg);
+    }
+}
+
+/* Sugerencia seleccionada */
+.suggestion-selected {
+    background-color: #991b1b !important;
+    color: white !important;
+}
+
+/* Botón aceptar calculadora */
+.calculator-accept-button {
+    padding: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.calculator-accept-button:active {
+    transform: scale(0.95);
+}
+
+/* NUEVOS ESTILOS PARA EL MENÚ HAMBURGUESA */
+.hamburger-button {
+    background-color: #1a1a1a;
+    border: 1px solid #991b1b;
+    padding: 10px;
+    border-radius: 0.75rem;
+    color: #ef4444;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.hamburger-button:hover {
+    background-color: #450a0a;
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+}
+
+#sideMenu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 250px;
+    height: 100%;
+    background-color: #0a0a0a;
+    border-left: 2px solid #991b1b;
+    z-index: 3000;
+    transition: right 0.3s ease-in-out;
+    padding: 20px;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#sideMenu.active {
+    right: 0;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2999;
+    display: none;
+    backdrop-filter: blur(2px);
+}
+
+.menu-overlay.active {
+    display: block;
+}
+
+.menu-close {
+    align-self: flex-end;
+    color: #ef4444;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.menu-item {
+    background-color: #1a1a1a;
+    color: #fca5a5;
+    padding: 15px;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.menu-item:hover {
+    background-color: #450a0a;
+    border-color: #991b1b;
+}
+
+.menu-item.print {
+    background-color: #7f1d1d;
+    color: white;
+}
+
+.menu-item.qr {
+    background-color: #065f46;
+    color: white;
+}
+
+.menu-item.scan {
+    background-color: #374151;
+    color: white;
+}
+
+.menu-item.options {
+    background-color: #111827;
+    color: white;
+}
+
+/* Fondo para la parte donde se van colocando los productos */
+#addedProductsList {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Ajusta la opacidad si es necesario para leer bien los nombres */
+    border-radius: 1rem;
+    padding: 10px;
+    min-height: 100px;
+}
