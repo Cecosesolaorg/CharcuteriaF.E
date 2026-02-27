@@ -3,7 +3,7 @@ $content = Get-Content $path
 $newContent = @()
 
 # Lines 1 to 31
-for ($i=0; $i -lt 31; $i++) {
+for ($i = 0; $i -lt 31; $i++) {
     $newContent += $content[$i]
 }
 
@@ -23,8 +23,9 @@ $newContent += "}"
 # 39: }
 # 40: 
 # 41: /* Estilo para el elemento de producto seleccionado */
-for ($i=39; $i -lt $content.Length; $i++) {
+for ($i = 39; $i -lt $content.Length; $i++) {
     $newContent += $content[$i]
 }
 
 $newContent | Set-Content $path
+
