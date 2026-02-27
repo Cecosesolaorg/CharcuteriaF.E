@@ -40,7 +40,7 @@ body {
 
 /* Fondo para la interfaz principal (Dashboard de productos) */
 .app-bg {
-    background-image: url('https://wallpapers.com/images/hd/black-red-neon-gzk57xzkuzjmuwip.jpg');
+    background-image: url('https://wallpapers.com/images/hd/red-and-black-background-5nel5tuydck7nrf1.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -439,5 +439,6 @@ body {
     min-height: 100px;
 
 }
+
 
 
