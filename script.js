@@ -190,8 +190,8 @@ const menuOverlay = document.getElementById('menuOverlay');
 const menuPrint = document.getElementById('menuPrint');
 const menuQr = document.getElementById('menuQr');
 const menuScan = document.getElementById('menuScan');
-const menuOptions = document.getElementById('menuOptions');
 const menuPrices = document.getElementById('menuPrices');
+const menuCounter = document.getElementById('menuCounter');
 const mainAppContainer = document.getElementById('mainAppContainer');
 
 const clientNameInput = document.getElementById('clientNameInput');
@@ -200,7 +200,6 @@ const productList = document.getElementById('productList');
 const addedProductsList = document.getElementById('addedProductsList');
 const scannerInputContainer = document.getElementById('scannerInputContainer');
 const scannerInput = document.getElementById('scannerInput');
-const suggestionsList = document.getElementById('suggestionsList');
 
 const calculatorModal = document.getElementById('calculatorModal');
 const calculatorTitle = document.getElementById('calculatorTitle');
@@ -239,6 +238,7 @@ const printProductsList = document.getElementById('printProductsList');
 const printClientName = document.getElementById('printClientName');
 
 
+
 const editCounterButton = document.getElementById('editCounterButton');
 const restoreModal = document.getElementById('restoreModal');
 const restoreInput = document.getElementById('restoreInput');
@@ -247,6 +247,10 @@ const cancelRestoreButton = document.getElementById('cancelRestoreButton');
 const resetConfirmModal = document.getElementById('resetConfirmModal');
 const confirmResetButton = document.getElementById('confirmResetButton');
 const cancelResetButton = document.getElementById('cancelResetButton');
+
+const logoutConfirmModal = document.getElementById('logoutConfirmModal');
+const confirmLogoutButton = document.getElementById('confirmLogoutButton');
+const cancelLogoutButton = document.getElementById('cancelLogoutButton');
 
 // ELEMENTOS DEL NUEVO MODAL INICIAL
 const initialSetupModal = document.getElementById('initialSetupModal');
@@ -268,6 +272,26 @@ let productPrices = {}; // Para almacenar los precios cargados
 let clientsData = JSON.parse(localStorage.getItem('clientsData')) || [];
 let savedClientNames = JSON.parse(localStorage.getItem('clientNames')) || [];
 let currentClientCedula = '';
+
+// Unificar manualClients con clientsData si no existen ya
+function synchronizeClientDatabase() {
+    let modified = false;
+    manualClients.forEach(mc => {
+        if (!clientsData.some(c => c.cedula === mc.cedula)) {
+            clientsData.push(mc);
+            modified = true;
+        }
+        if (!savedClientNames.includes(mc.name)) {
+            savedClientNames.push(mc.name);
+            modified = true;
+        }
+    });
+    if (modified) {
+        localStorage.setItem('clientsData', JSON.stringify(clientsData));
+        localStorage.setItem('clientNames', JSON.stringify(savedClientNames));
+    }
+}
+synchronizeClientDatabase();
 
 function saveClientData(cedula, name) {
     name = name.trim();
@@ -342,7 +366,7 @@ initialCedula.addEventListener('keydown', (e) => {
                 initialName.classList.add('bg-red-900', 'border-red-600', 'text-white');
             }
         }
-        initialName.focus(); // Pasar al nombre para permitir modificar
+        initialName.focus();
     }
 });
 
@@ -353,9 +377,8 @@ initialName.addEventListener('keydown', (e) => {
     }
 });
 
+// Autocompletado para el modal inicial eliminado a petición del usuario
 // === AUTOCOMPLETADO DE CLIENTES ===
-let selectedSuggestionIndex = -1;
-
 function saveClientName(name) {
     name = name.trim();
     if (name && !savedClientNames.includes(name)) {
@@ -363,93 +386,9 @@ function saveClientName(name) {
         localStorage.setItem('clientNames', JSON.stringify(savedClientNames));
     }
 }
+// Autocompletado de clientes eliminado a petición del usuario
 
-function updateSuggestionHighlight(items) {
-    items.forEach((item, index) => {
-        if (index === selectedSuggestionIndex) {
-            item.classList.add('suggestion-selected');
-            item.scrollIntoView({ block: 'nearest' });
-        } else {
-            item.classList.remove('suggestion-selected');
-        }
-    });
-}
-
-clientNameInput.addEventListener('input', function () {
-    const value = this.value.toLowerCase();
-    suggestionsList.innerHTML = '';
-    selectedSuggestionIndex = -1;
-
-    if (!value) {
-        suggestionsList.classList.add('hidden');
-        return;
-    }
-
-    const manualNames = manualClients.map(c => c.name);
-    const allNamesSource = [...new Set([...savedClientNames, ...manualNames])];
-    const matches = allNamesSource.filter(name => name.toLowerCase().includes(value));
-
-    if (matches.length > 0) {
-        matches.forEach((name) => {
-            const li = document.createElement('li');
-            li.className = 'px-4 py-2 hover:bg-gray-600 cursor-pointer text-gray-200 border-b border-gray-600 last:border-0';
-            li.textContent = name;
-            li.addEventListener('click', () => {
-                selectSuggestion(name);
-            });
-            suggestionsList.appendChild(li);
-        });
-        suggestionsList.classList.remove('hidden');
-    } else {
-        suggestionsList.classList.add('hidden');
-    }
-});
-
-function selectSuggestion(name) {
-    clientNameInput.value = name;
-    suggestionsList.classList.add('hidden');
-    searchInput.focus();
-}
-
-clientNameInput.addEventListener('keydown', function (e) {
-    const items = suggestionsList.querySelectorAll('li');
-
-    if (suggestionsList.classList.contains('hidden') || items.length === 0) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            suggestionsList.classList.add('hidden');
-            searchInput.focus();
-        }
-        return;
-    }
-
-    if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
-        updateSuggestionHighlight(items);
-    } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (selectedSuggestionIndex === -1) selectedSuggestionIndex = items.length;
-        selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
-        updateSuggestionHighlight(items);
-    } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (selectedSuggestionIndex > -1) {
-            items[selectedSuggestionIndex].click();
-        } else {
-            suggestionsList.classList.add('hidden');
-            searchInput.focus();
-        }
-    } else if (e.key === 'Escape') {
-        suggestionsList.classList.add('hidden');
-    }
-});
-
-document.addEventListener('click', (e) => {
-    if (!clientNameInput.contains(e.target) && !suggestionsList.contains(e.target)) {
-        suggestionsList.classList.add('hidden');
-    }
-});
+// Click global eliminado
 
 
 function renderProducts(list, selectedIndex) {
@@ -862,7 +801,7 @@ function preparePrint() {
 }
 
 function printProducts() {
-    if (clientNameInput.value) saveClientName(clientNameInput.value);
+    if (clientNameInput.value) saveClientData(currentClientCedula, clientNameInput.value);
     let printCount = parseInt(localStorage.getItem('printCount')) || 0;
     printCount++;
     localStorage.setItem('printCount', printCount);
@@ -922,7 +861,7 @@ menuScan.addEventListener('click', () => {
     toggleMenu();
 });
 
-menuOptions.addEventListener('click', () => {
+menuCounter.addEventListener('click', () => {
     updatePrintCountDisplay();
     optionsModal.style.display = 'flex';
     toggleMenu();
@@ -938,6 +877,14 @@ menuPrices.addEventListener('click', () => {
 closeOptionsModal.addEventListener('click', () => {
     optionsModal.style.display = 'none';
 });
+
+// === GESTIÓN DEL CONTADOR (Restaurada) ===
+function updatePrintCountDisplay() {
+    const printCount = localStorage.getItem('printCount') || 0;
+    if (printCounterDisplay) {
+        printCounterDisplay.textContent = printCount.toString().padStart(4, '0');
+    }
+}
 
 resetCounterButton.addEventListener('click', () => {
     resetConfirmModal.style.display = 'flex';
@@ -977,6 +924,37 @@ confirmRestoreButton.addEventListener('click', () => {
     }
 });
 
+confirmLogoutButton.addEventListener('click', () => {
+    // Vaciar productos
+    addedProducts = [];
+    saveAddedProducts();
+    renderAddedProducts();
+
+    // Limpiar campos de cliente
+    initialCedula.value = '';
+    initialName.value = '';
+    currentClientCedula = '';
+    clientNameInput.value = '';
+    nationalityPrefix.value = 'V';
+
+    // Cerrar modal y volver al inicio
+    logoutConfirmModal.style.display = 'none';
+    initialSetupModal.style.display = 'flex';
+    mainAppContainer.style.display = 'none';
+
+    document.body.classList.remove('app-bg');
+    document.body.classList.add('initial-bg');
+
+    setTimeout(() => {
+        initialCedula.focus();
+    }, 100);
+});
+
+cancelLogoutButton.addEventListener('click', () => {
+    logoutConfirmModal.style.display = 'none';
+});
+
+
 
 document.addEventListener('keydown', (e) => {
     const key = e.key;
@@ -992,6 +970,8 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
+    // Lógica para cerrar sugerencias eliminada
+
     // Lógica para calculadora si está abierta
     if (calculatorModal.style.display === 'flex') {
         if (key === 'Enter') {
@@ -1000,7 +980,48 @@ document.addEventListener('keydown', (e) => {
         } else if (key === 'Escape') {
             e.preventDefault();
             closeCalculator();
+
+            // Regresar a inicio de cédula/nombre
+            initialSetupModal.style.display = 'flex';
+            mainAppContainer.style.display = 'none';
+            document.body.classList.remove('app-bg');
+            document.body.classList.add('initial-bg');
+
+            setTimeout(() => {
+                initialName.focus();
+                initialName.select();
+            }, 100);
         }
+        return;
+    }
+
+    // Escape para volver al inicio desde la pantalla principal (SIN BORRAR DATOS)
+    if (key === 'Escape' && initialSetupModal.style.display !== 'flex' &&
+        optionsModal.style.display !== 'flex' && priceModal.style.display !== 'flex' &&
+        unitModal.style.display !== 'flex' && qrModal.style.display !== 'flex' &&
+        logoutConfirmModal.style.display !== 'flex' && resetConfirmModal.style.display !== 'flex') {
+
+        initialSetupModal.style.display = 'flex';
+        mainAppContainer.style.display = 'none';
+        document.body.classList.remove('app-bg');
+        document.body.classList.add('initial-bg');
+
+        setTimeout(() => {
+            initialName.focus();
+            initialName.select();
+        }, 100);
+        return;
+    }
+
+    // F4 para SALIR Y BORRAR TODO
+    if (key === 'F4' && logoutConfirmModal.style.display !== 'flex') {
+        logoutConfirmModal.style.display = 'flex';
+        return;
+    }
+
+    if (logoutConfirmModal.style.display === 'flex') {
+        if (key === 'Enter') { e.preventDefault(); confirmLogoutButton.click(); }
+        else if (key === 'Escape') { e.preventDefault(); cancelLogoutButton.click(); }
         return;
     }
 
@@ -1122,11 +1143,7 @@ function savePrices() {
     priceModal.style.display = 'none';
 }
 
-managePricesButton.addEventListener('click', () => {
-    renderPriceList();
-    priceModal.style.display = 'flex';
-    priceSearchInput.focus();
-});
+
 
 closePriceModal.addEventListener('click', () => {
     priceModal.style.display = 'none';
