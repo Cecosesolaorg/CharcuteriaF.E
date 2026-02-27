@@ -18,6 +18,19 @@ body {
     height: 100vh;
 }
 
+/* Ocultar barra de desplazamiento globalmente */
+* {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+}
+
 /* Contenedor principal */
 .container-full {
     width: 100%;
@@ -439,6 +452,3 @@ body {
     min-height: 100px;
 
 }
-
-
-
